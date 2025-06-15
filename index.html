@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Absensi Siswa</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2980b9;
+        --success-color: #2ecc71;
+        --danger-color: #e74c3c;
+        --warning-color: #f39c12;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --gray-color: #95a5a6;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .login-container,
+      .dashboard {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-top: 50px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        color: var(--primary-color);
+        margin-bottom: 10px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border 0.3s;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary-color);
+        outline: none;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        transition: background-color 0.3s;
+        text-align: center;
+        width: 100%;
+      }
+
+      .btn:hover {
+        background-color: var(--secondary-color);
+      }
+
+      .btn-success {
+        background-color: var(--success-color);
+      }
+
+      .btn-success:hover {
+        background-color: #27ae60;
+      }
+
+      .btn-danger {
+        background-color: var(--danger-color);
+      }
+
+      .btn-danger:hover {
+        background-color: #c0392b;
+      }
+
+      .btn-warning {
+        background-color: var(--warning-color);
+      }
+
+      .btn-warning:hover {
+        background-color: #e67e22;
+      }
+
+      .nav-tabs {
+        display: flex;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+      }
+
+      .nav-tabs .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+      }
+
+      .nav-tabs .tab.active {
+        border-bottom: 3px solid var(--primary-color);
+        font-weight: 500;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      table th,
+      table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      table th {
+        background-color: var(--light-color);
+        font-weight: 500;
+      }
+
+      table tr:hover {
+        background-color: rgba(52, 152, 219, 0.1);
+      }
+
+      .status-present {
+        color: var(--success-color);
+        font-weight: 500;
+      }
+
+      .status-absent {
+        color: var(--danger-color);
+        font-weight: 500;
+      }
+
+      .status-permit {
+        color: var(--warning-color);
+        font-weight: 500;
+      }
+
+      .filter-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .filter-group select,
+      .filter-group input {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .alert-success {
+        background-color: rgba(46, 204, 113, 0.2);
+        border-left: 4px solid var(--success-color);
+      }
+
+      .alert-danger {
+        background-color: rgba(231, 76, 60, 0.2);
+        border-left: 4px solid var(--danger-color);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .user-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .logout-btn {
+        background-color: var(--danger-color);
+        padding: 8px 15px;
+        width: auto;
+      }
+
+      .status-select {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .status-present {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .status-permit {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      .status-sick {
+        background-color: #e2e3e5;
+        color: #383d41;
+      }
+      .status-absent {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .status-not-set {
+        background-color: #f8f9fa;
+        color: #6c757d;
+      }
+
+      .btn-save {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .btn-save:hover {
+        background-color: #218838;
+      }
+
+      .btn-update-all {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      .btn-update-all:hover {
+        background-color: #0056b3;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 10px;
+        }
+
+        .login-container,
+        .dashboard {
+          padding: 20px;
+          margin-top: 20px;
+        }
+
+        .filter-group {
+          flex-direction: column;
+        }
+
+        .filter-group select,
+        .filter-group input {
+          width: 100%;
+        }
+      }
+
+      .btn-disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .fa-spinner {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Login Section -->
+      <div id="loginSection" class="login-container">
+        <div class="header">
+          <h1>Sistem Absensi Siswa</h1>
+          <p>Silakan login untuk melanjutkan</p>
+        </div>
+
+        <div id="loginAlert" class="alert hidden"></div>
+
+        <div class="form-group">
+          <label for="userType">Login Sebagai</label>
+          <select id="userType" class="form-control">
+            <option value="siswa">Siswa</option>
+            <option value="guru">Guru</option>
+          </select>
+        </div>
+
+        <div id="siswaFields">
+          <div class="form-group">
+            <label for="nis">NIS</label>
+            <input
+              type="text"
+              id="nis"
+              class="form-control"
+              placeholder="Masukkan NIS"
+            />
+          </div>
+          <div class="form-group">
+            <label for="passwordSiswa">Password</label>
+            <input
+              type="password"
+              id="passwordSiswa"
+              class="form-control"
+              placeholder="Masukkan Password"
+            />
+          </div>
+        </div>
+
+        <div id="guruFields" class="hidden">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+              placeholder="Masukkan Username"
+            />
+          </div>
+          <div class="form-group">
+            <label for="passwordGuru">Password</label>
+            <input
+              type="password"
+              id="passwordGuru"
+              class="form-control"
+              placeholder="Masukkan Password"
+            />
+          </div>
+        </div>
+
+        <button id="loginBtn" class="btn">Login</button>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div id="dashboardSection" class="dashboard hidden">
+        <div class="user-info">
+          <div>
+            <h2 id="welcomeMessage"></h2>
+            <p id="userRole"></p>
+          </div>
+          <button id="logoutBtn" class="btn logout-btn">Logout</button>
+        </div>
+
+        <!-- Siswa Dashboard -->
+        <div id="siswaDashboard" class="hidden">
+          <div class="header">
+            <h1>Absensi Hari Ini</h1>
+            <p id="currentDate"></p>
+          </div>
+
+          <div id="absensiAlert" class="alert hidden"></div>
+
+          <div class="form-group">
+            <label>Status Kehadiran</label>
+            <div style="display: flex; gap: 10px">
+              <button id="hadirBtn" class="btn btn-success">Hadir</button>
+              <button id="izinBtn" class="btn btn-warning">Izin</button>
+              <button id="absenBtn" class="btn btn-danger">Absen</button>
+            </div>
+          </div>
+
+          <h3>Riwayat Kehadiran</h3>
+          <div class="table-responsive">
+            <table id="riwayatTable">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="riwayatBody">
+                <!-- Data akan diisi oleh JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Guru Dashboard -->
+        <div id="guruDashboard" class="hidden">
+          <div class="nav-tabs">
+            <div class="tab active" data-tab="monitoring">
+              Monitoring Kehadiran
+            </div>
+            <div class="tab" data-tab="tambahSiswa">Tambah Siswa</div>
+            <div class="tab" data-tab="tambahKelas">Tambah Kelas</div>
+          </div>
+
+          <div id="guruAlert" class="alert hidden"></div>
+
+          <!-- Monitoring Tab -->
+          <div id="monitoringTab" class="tab-content active">
+            <div class="filter-group">
+              <select id="filterKelas" class="form-control">
+                <option value="all">Semua Kelas</option>
+              </select>
+              <input type="date" id="filterTanggal" class="form-control" />
+              <button id="filterBtn" class="btn">Filter</button>
+              <button id="exportBtn" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Export Excel
+              </button>
+              <button onclick="updateAllKehadiran()" class="btn">
+                Update Semua
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table id="kehadiranTable" class="table-actions">
+                <thead>
+                  <tr>
+                    <th width="50">No</th>
+                    <th>NIS</th>
+                    <th>Nama</th>
+                    <th>Kelas</th>
+                    <th>Status</th>
+                    <th>Waktu</th>
+                    <th width="100">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="kehadiranBody">
+                  <!-- Data akan diisi oleh JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tambah Siswa Tab -->
+          <div id="tambahSiswaTab" class="tab-content">
+            <div class="form-group">
+              <label for="newNis">NIS</label>
+              <input
+                type="text"
+                id="newNis"
+                class="form-control"
+                placeholder="Masukkan NIS"
+              />
+            </div>
+            <div class="form-group">
+              <label for="newNama">Nama Siswa</label>
+              <input
+                type="text"
+                id="newNama"
+                class="form-control"
+                placeholder="Masukkan Nama Siswa"
+              />
+            </div>
+            <div class="form-group">
+              <label for="newKelas">Kelas</label>
+              <select id="newKelas" class="form-control">
+                <!-- Data akan diisi oleh JavaScript -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="newPassword">Password</label>
+              <input
+                type="password"
+                id="newPassword"
+                class="form-control"
+                placeholder="Masukkan Password"
+              />
+            </div>
+            <button id="tambahSiswaBtn" class="btn">Tambah Siswa</button>
+          </div>
+
+          <!-- Tambah Kelas Tab -->
+          <div id="tambahKelasTab" class="tab-content">
+            <div class="form-group">
+              <label for="namaKelas">Nama Kelas</label>
+              <input
+                type="text"
+                id="namaKelas"
+                class="form-control"
+                placeholder="Masukkan Nama Kelas (Contoh: X IPA 1)"
+              />
+            </div>
+            <button id="tambahKelasBtn" class="btn">Tambah Kelas</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  </body>
+</html>
