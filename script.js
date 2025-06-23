@@ -1,6 +1,6 @@
 // URL Apps Script Web App
 const SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbwPNoxFho_tYQoo7Zztr1m3Z97BOfZ4UXzCxPGF0cUoVQycYgik9qZRMumQg5eeC4yy7w/exec';
+  'https://script.google.com/macros/s/AKfycbwMBXmkrcHNz3MqwmLgrLJLC-q-fCZkwhQbM7Bbq8-OIEiNExJkOO8jx_uzr4Yplj0j/exec';
 
 // DOM Elements
 const loginSection = document.getElementById('loginSection');
